@@ -1,1 +1,1 @@
-window.__LOCAL_IP__='192.168.1.150';window.__PORT__=3000;
+window.__LOCAL_IP__='172.20.10.2';window.__PORT__=3000;
