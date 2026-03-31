@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>手机文件传输</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>📱 手机文件传输</h1>
+      <p class="subtitle">选择照片或视频，快速传到电脑</p>
+    </header>
+
+    <!-- 上传区域 -->
+    <div class="upload-area" id="uploadArea">
+      <div class="upload-icon">📂</div>
+      <p>点击选择文件或拖拽到此处</p>
+      <div class="upload-buttons">
+        <label class="btn btn-primary" for="fileInput">
+          🖼️ 选择相册
+        </label>
+        <label class="btn btn-secondary" for="cameraInput">
+          📸 拍照上传
+        </label>
+      </div>
+      <input type="file" id="fileInput" multiple accept="image/*,video/*" hidden>
+      <input type="file" id="cameraInput" capture="environment" accept="image/*" hidden>
+    </div>
+
+    <!-- 文件预览列表 -->
+    <div class="file-list" id="fileList" style="display:none;">
+      <div class="file-list-header">
+        <h2>已选择 <span id="fileCount">0</span> 个文件</h2>
+        <div class="file-list-actions">
+          <button class="btn btn-small btn-secondary" id="addMoreBtn">继续选择</button>
+          <button class="btn btn-small btn-clear" id="clearBtn">清空</button>
+        </div>
+      </div>
+      <div class="file-items" id="fileItems"></div>
+      <button class="btn btn-primary btn-upload" id="uploadBtn">
+        🚀 开始上传
+      </button>
+    </div>
+
+    <!-- 上传状态 -->
+    <div class="upload-status" id="uploadStatus" style="display:none;">
+      <div class="status-header">
+        <h2 id="statusTitle">正在上传...</h2>
+        <p id="statusSubtitle"></p>
+      </div>
+      <div class="overall-progress">
+        <div class="progress-bar">
+          <div class="progress-fill" id="overallProgress"></div>
+        </div>
+        <span class="progress-text" id="overallText">0%</span>
+      </div>
+      <div class="status-items" id="statusItems"></div>
+      <button class="btn btn-primary btn-upload" id="doneBtn" style="display:none;">
+        ✅ 继续上传
+      </button>
+    </div>
+
+    <!-- 电脑端管理页（通过 QR 码展示） -->
+    <div class="qr-section" id="qrSection">
+      <div class="qr-divider">
+        <span>电脑端扫码区</span>
+      </div>
+      <div class="qr-content">
+        <img id="qrImage" alt="QR Code">
+        <p class="qr-url" id="qrUrl"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 图片预览灯箱 -->
+  <div class="lightbox" id="lightbox" style="display:none;">
+    <button class="lightbox-close" id="lightboxClose">✕</button>
+    <img class="lightbox-img" id="lightboxImg" alt="预览图片">
+  </div>
+
+  <script src="upload.js"></script>
+</body>
+</html>
