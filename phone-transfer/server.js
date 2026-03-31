@@ -124,7 +124,8 @@ app.use(express.static(getPublicDir()));
 // ─── QR Code API（供前端展示） ───
 app.get('/api/qrcode', async (req, res) => {
   const ip = getLocalIP();
-  const url = `http://${ip}:${PORT}`;
+  const customUrl = req.query.url;
+  const url = customUrl || `http://${ip}:${PORT}`;
   try {
     const dataUrl = await qrcode.toDataURL(url, { width: 256, margin: 2 });
     res.json({ url, qrcode: dataUrl });
@@ -249,14 +250,6 @@ const ip = getLocalIP();
 const url = `http://${ip}:${PORT}`;
 
 app.listen(PORT, '0.0.0.0', () => {
-  // 写入 ip-config.js 供使用说明.html 读取本机 IP
-  try {
-    const configContent = `window.__LOCAL_IP__='${ip}';window.__PORT__=${PORT};`;
-    fs.writeFileSync(path.join(process.cwd(), 'ip-config.js'), configContent);
-  } catch (e) {
-    // 写入失败不影响主功能
-  }
-
   console.log('');
   console.log('  ╔══════════════════════════════════════════╗');
   console.log('  ║       📱 手机文件传输工具已启动           ║');
@@ -277,15 +270,18 @@ app.listen(PORT, '0.0.0.0', () => {
     console.log('');
   });
 
-  // 自动打开使用说明.html
+  // 自动打开使用说明页面（通过浏览器访问服务）
   try {
-    const manualPath = path.join(process.cwd(), '使用说明.html');
-    if (fs.existsSync(manualPath)) {
-      const openCmd = process.platform === 'win32'
-        ? `start "" "${manualPath}"`
-        : `open "${manualPath}"`;
-      exec(openCmd);
+    const guideUrl = `http://localhost:${PORT}/guide.html`;
+    let openCmd;
+    if (process.platform === 'win32') {
+      openCmd = `start "" "${guideUrl}"`;
+    } else if (process.platform === 'darwin') {
+      openCmd = `open "${guideUrl}"`;
+    } else {
+      openCmd = `xdg-open "${guideUrl}"`;
     }
+    exec(openCmd);
   } catch (e) {
     // 打开失败不影响主功能
   }

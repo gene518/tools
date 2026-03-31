@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>手机文件传输 - 使用说明</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: #f5f5f7;
+      color: #1d1d1f;
+      line-height: 1.8;
+    }
+    .container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+    .section {
+      background: #fff;
+      border-radius: 16px;
+      padding: 36px 40px;
+      margin: 24px auto;
+      max-width: 900px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+    .section h2 {
+      font-size: 24px; font-weight: 700; color: #1d1d1f;
+      margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid #f0f0f0;
+    }
+    .section h3 { font-size: 18px; font-weight: 600; color: #333; margin: 24px 0 12px; }
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px; margin: 16px 0;
+    }
+    .feature-card {
+      background: #f8f9fa; border-radius: 12px; padding: 20px; text-align: center;
+    }
+    .feature-card .icon { font-size: 32px; margin-bottom: 8px; }
+    .feature-card h4 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+    .feature-card p { font-size: 13px; color: #666; }
+    .phone-compat { display: flex; gap: 12px; flex-wrap: wrap; margin: 12px 0; }
+    .phone-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 16px; background: #f0fdf4; border: 1px solid #86efac;
+      border-radius: 20px; font-size: 14px; font-weight: 500; color: #166534;
+    }
+
+    /* ─── 二维码区域 ─── */
+    .qr-generator {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 16px;
+      padding: 40px;
+      margin: 24px auto;
+      max-width: 900px;
+      box-shadow: 0 4px 24px rgba(102 ,126, 234, 0.3);
+      text-align: center;
+      color: #fff;
+    }
+    .qr-generator h2 {
+      font-size: 24px; font-weight: 700; margin-bottom: 8px; border: none; padding: 0;
+      color: #fff;
+    }
+    .qr-generator .qr-desc {
+      font-size: 15px; opacity: 0.85; margin-bottom: 28px;
+    }
+    .qr-input-row {
+      display: flex; gap: 0; max-width: 520px; margin: 0 auto 24px;
+      border-radius: 12px; overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    }
+    .qr-input-prefix {
+      background: rgba(255,255,255,0.15); color: #fff; padding: 14px 16px;
+      font-size: 15px; font-weight: 500; white-space: nowrap;
+      display: flex; align-items: center;
+      border-right: 1px solid rgba(255,255,255,0.2);
+    }
+    .qr-input-row input {
+      flex: 1; padding: 14px 16px; font-size: 16px; border: none;
+      outline: none; background: #fff; color: #333;
+      min-width: 0;
+    }
+    .qr-input-row input::placeholder { color: #aaa; }
+    .qr-input-suffix {
+      background: rgba(255,255,255,0.15); color: #fff; padding: 14px 12px;
+      font-size: 15px; font-weight: 500; white-space: nowrap;
+      display: flex; align-items: center;
+      border-left: 1px solid rgba(255,255,255,0.2);
+    }
+    .qr-generate-btn {
+      background: #fff; color: #4f46e5; border: none; padding: 14px 36px;
+      font-size: 16px; font-weight: 700; border-radius: 10px; cursor: pointer;
+      transition: all 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .qr-generate-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
+    .qr-generate-btn:active { transform: scale(0.97); }
+    .qr-card {
+      background: #fff; border-radius: 16px; padding: 32px;
+      display: inline-block; box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+      min-width: 180px;
+    }
+    .qr-card img {
+      display: block; width: 256px; height: 256px;
+    }
+    .qr-card .qr-url-text {
+      color: #4f46e5; font-size: 16px; font-weight: 700;
+      margin-top: 16px; word-break: break-all;
+    }
+    .qr-loading {
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; padding: 40px 24px; color: #999;
+      font-size: 14px; gap: 12px;
+    }
+    .qr-loading-spinner {
+      width: 36px; height: 36px; border: 3px solid #e8e8e8;
+      border-top-color: #4f46e5; border-radius: 50%;
+      animation: qr-spin 0.8s linear infinite;
+    }
+    @keyframes qr-spin { to { transform: rotate(360deg); } }
+    .qr-custom-section {
+      margin-top: 24px; padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.2);
+    }
+    .qr-custom-label {
+      font-size: 13px; opacity: 0.75; margin-bottom: 10px;
+    }
+
+    /* ─── 使用步骤 ─── */
+    .steps { counter-reset: step; }
+    .step { display: flex; gap: 16px; margin-bottom: 24px; align-items: flex-start; }
+    .step-num {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: #4f46e5; color: #fff; display: flex;
+      align-items: center; justify-content: center;
+      font-weight: 700; font-size: 16px; flex-shrink: 0; margin-top: 2px;
+    }
+    .step-content { flex: 1; }
+    .step-content h4 { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
+    .step-content p { font-size: 14px; color: #555; }
+    .tip-box {
+      background: #eef2ff; border-left: 4px solid #4f46e5;
+      padding: 14px 18px; border-radius: 0 10px 10px 0;
+      margin: 16px 0; font-size: 14px;
+    }
+    .tip-box strong { color: #4f46e5; }
+    .warn-box {
+      background: #fef3cd; border-left: 4px solid #f59e0b;
+      padding: 14px 18px; border-radius: 0 10px 10px 0;
+      margin: 16px 0; font-size: 14px;
+    }
+    .warn-box strong { color: #d97706; }
+    .code-block {
+      background: #1e1e2e; color: #cdd6f4; padding: 16px 20px;
+      border-radius: 10px; font-family: 'SF Mono','Menlo','Consolas',monospace;
+      font-size: 14px; margin: 12px 0; overflow-x: auto; line-height: 1.6;
+    }
+    .code-block .prompt { color: #a6adc8; }
+    .code-block .cmd { color: #a6e3a1; }
+
+    /* ─── 平台切换 ─── */
+    .platform-tabs {
+      display: flex; gap: 0; margin-bottom: 24px;
+      border-radius: 10px; overflow: hidden; border: 2px solid #4f46e5;
+    }
+    .platform-tab {
+      flex: 1; padding: 12px 20px; text-align: center; cursor: pointer;
+      font-weight: 600; font-size: 15px; transition: all 0.2s;
+      background: #fff; color: #4f46e5; border: none;
+    }
+    .platform-tab.active { background: #4f46e5; color: #fff; }
+    .platform-tab:hover:not(.active) { background: #eef2ff; }
+    .platform-content { display: none; }
+    .platform-content.active { display: block; }
+
+    table {
+      width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px;
+    }
+    th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid #eee; }
+    th { background: #f8f9fa; font-weight: 600; color: #333; }
+
+    .footer {
+      text-align: center; padding: 30px 20px; font-size: 13px; color: #999;
+    }
+    @media (max-width: 600px) {
+      .section { padding: 24px 20px; }
+      .qr-generator { padding: 28px 20px; }
+      .qr-input-row { flex-direction: column; border-radius: 12px; }
+      .qr-input-prefix { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.2); justify-content: center; }
+      .qr-input-suffix { border-left: none; border-top: 1px solid rgba(255,255,255,0.2); justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════ 二维码区域 ═══════════ -->
+<div class="qr-generator" id="qrGenerator">
+  <h2>📲 扫二维码上传</h2>
+  <p class="qr-desc">手机与电脑连接同一 WiFi，扫码即可打开上传页面</p>
+
+  <div class="qr-card">
+    <div class="qr-loading" id="qrLoading">
+      <div class="qr-loading-spinner"></div>
+      <p>正在获取本机 IP…</p>
+    </div>
+    <img id="qrImage" style="display:none" alt="QR Code">
+    <div class="qr-url-text" id="qrUrlText"></div>
+  </div>
+
+  <div class="qr-custom-section">
+    <p class="qr-custom-label">自定义地址：</p>
+    <div class="qr-input-row">
+      <span class="qr-input-prefix">http://</span>
+      <input type="text" id="ipInput" placeholder="192.168.1.100" autocomplete="off" spellcheck="false">
+      <span class="qr-input-suffix">:<span id="portDisplay">3000</span></span>
+    </div>
+    <button class="qr-generate-btn" id="generateBtn">生成二维码</button>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- 产品介绍 -->
+  <div class="section">
+    <h2>📖 产品简介</h2>
+    <p>「手机文件传输」是一款基于局域网的轻量级文件传输工具。在电脑上启动后，手机扫描屏幕上的二维码即可打开上传页面，将照片和视频直接传输到电脑中。</p>
+
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="icon">🚀</div>
+        <h4>一键启动</h4>
+        <p>双击即可运行，无需安装</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">📱</div>
+        <h4>扫码即用</h4>
+        <p>手机扫二维码直接传文件</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">🔒</div>
+        <h4>局域网传输</h4>
+        <p>数据不经过互联网，安全可靠</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">📦</div>
+        <h4>批量上传</h4>
+        <p>支持一次选择多个文件上传</p>
+      </div>
+    </div>
+
+    <h3>📲 支持的手机系统</h3>
+    <div class="phone-compat">
+      <span class="phone-badge">✅ iOS (iPhone / iPad)</span>
+      <span class="phone-badge">✅ Android</span>
+      <span class="phone-badge">✅ HarmonyOS (鸿蒙)</span>
+    </div>
+
+    <h3>💻 支持的电脑系统</h3>
+    <div class="phone-compat">
+      <span class="phone-badge">✅ macOS (Intel & Apple Silicon)</span>
+      <span class="phone-badge">✅ Windows 10/11 (64位)</span>
+    </div>
+  </div>
+
+  <!-- 使用指南 -->
+  <div class="section">
+    <h2>🚀 使用步骤</h2>
+
+    <div class="tip-box">
+      <strong>⚡ 前提条件：</strong>手机和电脑必须连接在同一个 WiFi 网络下！
+    </div>
+
+    <div class="platform-tabs" id="stepsTabs">
+      <button class="platform-tab active" data-platform="mac">🍎 macOS</button>
+      <button class="platform-tab" data-platform="win">🪟 Windows</button>
+    </div>
+
+    <!-- macOS -->
+    <div id="platform-mac" class="platform-content active">
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h4>解压文件</h4>
+            <p>将 <strong>phone-transfer-mac.zip</strong>（或 phone-transfer-mac-arm.zip）解压到任意位置。</p>
+            <div class="tip-box">
+              <strong>💡 如何选择版本？</strong><br>
+              • <strong>Intel 芯片</strong> (2020年及之前的 Mac)：使用 <code>phone-transfer-mac.zip</code><br>
+              • <strong>Apple Silicon</strong> (M1/M2/M3/M4 芯片)：使用 <code>phone-transfer-mac-arm.zip</code><br>
+              点击左上角  → 关于本机 → 可以查看芯片类型
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h4>双击「start.command」</h4>
+            <p>在解压后的文件夹中，双击「start.command」文件。</p>
+            <div class="warn-box">
+              <strong>⚠️ 首次运行安全提示</strong><br>
+              如果提示"无法打开"：右键点击「start.command」→ 选择「打开」→ 在弹窗中点击「打开」<br>
+              或在终端中执行：<code>chmod +x phone-transfer start.command && ./start.command</code>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h4>浏览器自动打开本页面</h4>
+            <p>程序启动后会自动打开此使用说明页面，同时终端窗口会显示局域网地址和二维码。</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <h4>手机扫描二维码</h4>
+            <p>用手机扫描上方二维码，打开上传页面，选择照片或视频即可传输到电脑。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Windows -->
+    <div id="platform-win" class="platform-content">
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h4>解压文件</h4>
+            <p>将 <strong>phone-transfer-win.zip</strong> 解压到任意位置。</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h4>双击「start.bat」</h4>
+            <p>在解压后的文件夹中，双击「start.bat」文件启动程序。</p>
+            <div class="warn-box">
+              <strong>⚠️ Windows 安全提示</strong><br>
+              如果提示"已保护你的电脑"：点击「更多信息」→ 点击「仍要运行」即可。
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h4>浏览器自动打开本页面</h4>
+            <p>程序启动后会自动打开此使用说明页面，同时命令行窗口会显示局域网地址和二维码。</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <h4>手机扫描二维码</h4>
+            <p>用手机扫描上方二维码，打开上传页面，选择照片或视频即可传输到电脑。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 高级设置 -->
+  <div class="section">
+    <h2>⚙️ 更多设置</h2>
+
+    <h3>自定义端口和保存目录</h3>
+    <p>如果默认端口 3000 被占用，或想更改保存位置：</p>
+
+    <div class="platform-tabs" id="advTabs">
+      <button class="platform-tab active" data-platform="mac">🍎 macOS</button>
+      <button class="platform-tab" data-platform="win">🪟 Windows</button>
+    </div>
+    <div id="adv-mac" class="platform-content active">
+      <div class="code-block">
+        <span class="prompt">$</span> <span class="cmd">./phone-transfer --port 8080 --dir ~/Desktop/photos</span>
+      </div>
+    </div>
+    <div id="adv-win" class="platform-content">
+      <div class="code-block">
+        <span class="prompt">&gt;</span> <span class="cmd">phone-transfer.exe --port 8080 --dir C:\Users\你的用户名\Desktop\photos</span>
+      </div>
+    </div>
+
+    <h3>文件保存位置</h3>
+    <table>
+      <tr><th>系统</th><th>默认保存路径</th></tr>
+      <tr><td>macOS</td><td><code>~/Pictures/手机传输/日期/</code></td></tr>
+      <tr><td>Windows</td><td><code>C:\Users\用户名\Pictures\手机传输\日期\</code></td></tr>
+    </table>
+
+    <h3>支持的文件格式</h3>
+    <table>
+      <tr><th>类型</th><th>格式</th></tr>
+      <tr><td>图片</td><td>JPG, JPEG, PNG, HEIC, GIF, WEBP</td></tr>
+      <tr><td>视频</td><td>MP4, MOV, AVI, MKV</td></tr>
+    </table>
+    <p style="font-size:14px;color:#666;">单文件最大 500MB，一次最多选择 50 个文件。</p>
+  </div>
+
+  <!-- 常见问题 -->
+  <div class="section">
+    <h2>❓ 常见问题</h2>
+
+    <h3>Q：手机扫码后无法打开页面？</h3>
+    <p>A：请确认手机和电脑连接在<strong>同一个 WiFi</strong> 下。如果使用了 VPN，请先关闭。</p>
+
+    <h3>Q：macOS 提示"无法验证开发者"？</h3>
+    <p>A：右键点击「start.command」→ 选择「打开」→ 在弹窗中点击「打开」。</p>
+
+    <h3>Q：Windows 提示"已保护你的电脑"？</h3>
+    <p>A：点击「更多信息」→ 点击「仍要运行」即可。</p>
+
+    <h3>Q：如何查看电脑的 IP 地址？</h3>
+    <p>A：启动程序后终端会自动显示。也可以手动查看：</p>
+    <p style="font-size:14px;">• macOS：系统设置 → Wi-Fi → 详细信息 → IP 地址<br>• Windows：设置 → 网络和Internet → Wi-Fi → 属性 → IPv4 地址</p>
+
+    <h3>Q：如何停止服务？</h3>
+    <p>A：关闭终端窗口即可，或按 <code>Ctrl + C</code>。</p>
+
+    <h3>Q：鸿蒙手机如何扫码？</h3>
+    <p>A：打开鸿蒙自带浏览器的扫码功能，或使用下拉通知栏中的"扫一扫"。</p>
+  </div>
+
+</div>
+
+<div class="footer">
+  手机文件传输 v1.0.0 ｜ 局域网传输 · 安全可靠 · 免安装使用
+</div>
+
+<script>
+(function() {
+  var ipInput = document.getElementById('ipInput');
+  var portDisplay = document.getElementById('portDisplay');
+  var qrLoading = document.getElementById('qrLoading');
+  var qrImage = document.getElementById('qrImage');
+  var qrUrlText = document.getElementById('qrUrlText');
+  var generateBtn = document.getElementById('generateBtn');
+
+  // 从服务端 API 加载二维码和信息
+  function loadQRCode() {
+    fetch('/api/info')
+      .then(function(r) { return r.json(); })
+      .then(function(info) {
+        ipInput.value = info.ip;
+        portDisplay.textContent = info.port || '3000';
+        return fetch('/api/qrcode');
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        qrImage.src = data.qrcode;
+        qrUrlText.textContent = data.url;
+        qrLoading.style.display = 'none';
+        qrImage.style.display = 'block';
+      })
+      .catch(function() {
+        qrLoading.innerHTML = '<p style="color:#bbb;font-size:14px">获取信息失败，请在下方输入 IP 地址生成二维码</p>';
+      });
+  }
+
+  loadQRCode();
+
+  // 自定义 IP 生成二维码
+  generateBtn.addEventListener('click', function() {
+    var ip = ipInput.value.trim();
+    if (!ip) {
+      ipInput.focus();
+      ipInput.style.outline = '3px solid #ef4444';
+      setTimeout(function() { ipInput.style.outline = ''; }, 1500);
+      return;
+    }
+    if (!/^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$/.test(ip)) {
+      ipInput.style.outline = '3px solid #ef4444';
+      setTimeout(function() { ipInput.style.outline = ''; }, 1500);
+      return;
+    }
+
+    var port = portDisplay.textContent || '3000';
+    var url = 'http://' + ip + ':' + port;
+
+    fetch('/api/qrcode?url=' + encodeURIComponent(url))
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        qrImage.src = data.qrcode;
+        qrUrlText.textContent = data.url;
+        qrLoading.style.display = 'none';
+        qrImage.style.display = 'block';
+      })
+      .catch(function() {
+        alert('生成二维码失败');
+      });
+  });
+
+  ipInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') generateBtn.click();
+  });
+
+  // 平台切换（使用步骤）
+  document.getElementById('stepsTabs').addEventListener('click', function(e) {
+    var btn = e.target.closest('.platform-tab');
+    if (!btn) return;
+    var platform = btn.dataset.platform;
+    this.querySelectorAll('.platform-tab').forEach(function(t) { t.classList.remove('active'); });
+    btn.classList.add('active');
+    document.getElementById('platform-mac').classList.toggle('active', platform === 'mac');
+    document.getElementById('platform-win').classList.toggle('active', platform === 'win');
+  });
+
+  // 平台切换（高级设置）
+  document.getElementById('advTabs').addEventListener('click', function(e) {
+    var btn = e.target.closest('.platform-tab');
+    if (!btn) return;
+    var platform = btn.dataset.platform;
+    this.querySelectorAll('.platform-tab').forEach(function(t) { t.classList.remove('active'); });
+    btn.classList.add('active');
+    document.getElementById('adv-mac').classList.toggle('active', platform === 'mac');
+    document.getElementById('adv-win').classList.toggle('active', platform === 'win');
+  });
+})();
+</script>
+
+</body>
+</html>
