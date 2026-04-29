@@ -1,0 +1,1 @@
+nohup tail -F /home/admin/info/info.log|grep "性能测试" >> perf.log 2>&1 &
