@@ -58,7 +58,8 @@ argument-hint: "plan / generator / heal + 目标描述"
 5. 同时读取并遵守以下两份规范（全部叠加生效）：
    - [通用] [mobile-ui-conventions.md](./references/mobile-ui-conventions.md) — 移动端 UI 自动化通用约束
    - [定制] [beida-medical-conventions.md](./references/beida-medical-conventions.md) — 北大医疗 IM 业务专项约束
-6. 工具使用范围限定在 Agent 指令文件中声明的「允许工具」列表内
+6. 当 Agent 指令与通用/业务规范存在重叠或冲突时，执行更具体、更严格的约束；heal 模式尤其必须遵守测试计划同步规则
+7. 工具使用范围限定在 Agent 指令文件中声明的「允许工具」列表内
 
 ## References
 
