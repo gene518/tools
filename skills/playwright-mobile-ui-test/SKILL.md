@@ -1,10 +1,9 @@
 ---
-name: beida_medical_ui_test
-description: "北大医疗 UI 自动化测试技能。包含三种模式：plan（生成测试计划）、generator（生成测试脚本）、heal（调试修复测试）。Use when: 生成测试计划、生成测试用例、生成脚本、调试测试、修复失败测试、运行测试、Playwright UI 测试、test plan、write test、generate test、debug test、fix failing test、run test。"
-argument-hint: "plan / generator / heal + 目标描述"
+name: playwright-mobile-ui-test
+description: "Playwright 移动端 UI 自动化测试技能。包含三种模式：plan（生成测试计划）、generator（生成测试脚本）、heal（调试修复测试）。Use when: 生成测试计划、生成测试用例、生成脚本、调试测试、修复失败测试、运行测试、Playwright UI 测试、test plan、write test、generate test、debug test、fix failing test、run test。"
 ---
 
-# 北大医疗 UI 自动化测试
+# Playwright 移动端 UI 自动化测试
 
 路由技能：识别用户意图 → 检查环境 → 加载 Agent 指令 + 规范 → 执行。
 三种模式：**plan**（生成测试计划）、**generator**（生成测试脚本）、**heal**（调试修复测试）。
@@ -37,7 +36,7 @@ argument-hint: "plan / generator / heal + 目标描述"
 }
 ```
 
-配置写入后，再次检查MCP时否可用，如果还不可用则检查**playwright-test MCP配置**（重新加载窗口或重启客户端），然后重新执行本技能。
+配置写入后，再次检查 MCP 是否可用，如果还不可用则检查 **playwright-test MCP 配置**（重新加载窗口或重启客户端），然后重新执行本技能。
 
 ## 意图识别
 
@@ -55,11 +54,10 @@ argument-hint: "plan / generator / heal + 目标描述"
 2. 意图不明确时，询问用户确认
 3. 执行「前置检查」，MCP 不可用则先安装和配置
 4. 读取对应的 Agent 指令文件，按其工作流程执行
-5. 同时读取并遵守以下两份规范（全部叠加生效）：
-   - [通用] [mobile-ui-conventions.md](./references/mobile-ui-conventions.md) — 移动端 UI 自动化通用约束
-   - [定制] [beida-medical-conventions.md](./references/beida-medical-conventions.md) — 北大医疗 IM 业务专项约束
-6. 当 Agent 指令与通用/业务规范存在重叠或冲突时，执行更具体、更严格的约束；heal 模式尤其必须遵守测试计划同步规则
-7. 工具使用范围限定在 Agent 指令文件中声明的「允许工具」列表内
+5. 读取并遵守 [mobile-ui-conventions.md](./references/mobile-ui-conventions.md) 的移动端 UI 自动化通用约束
+6. 如果用户或项目提供了项目专项规范，读取并叠加遵守；本技能内置的 [demo-app-conventions.md](./references/demo-app-conventions.md) 仅作为项目专项规范写法示例，不要默认强制套用 demo 中的基础类、路由或文案
+7. 当 Agent 指令与通用/项目规范存在重叠或冲突时，执行更具体、更严格的约束；heal 模式尤其必须遵守测试计划同步规则
+8. 工具使用范围限定在 Agent 指令文件中声明的「允许工具」列表内
 
 ## References
 
@@ -67,4 +65,4 @@ argument-hint: "plan / generator / heal + 目标描述"
 
 - Agent 指令（三选一）：见「意图识别」表
 - 移动端通用规范：[mobile-ui-conventions.md](./references/mobile-ui-conventions.md)
-- 北大医疗业务规范：[beida-medical-conventions.md](./references/beida-medical-conventions.md)
+- 项目专项规范示例：[demo-app-conventions.md](./references/demo-app-conventions.md)

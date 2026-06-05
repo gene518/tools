@@ -1,0 +1,4 @@
+interface:
+  display_name: "Playwright Mobile UI Test"
+  short_description: "Plan, generate, and heal mobile UI tests"
+  default_prompt: "Use $playwright-mobile-ui-test to create a mobile UI test plan, generate Playwright specs, or fix failing tests."
