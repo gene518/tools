@@ -6,6 +6,15 @@
 
 ---
 
+## Playwright 版本约束
+
+- `@playwright/test` 与 `playwright-test` MCP 服务统一固定为 **v1.61.1**
+- MCP 服务必须使用 `npx --yes playwright@1.61.1 run-test-mcp-server` 启动
+- 禁止使用未指定版本的 `playwright`、`playwright@latest`、版本范围或其他版本
+- 升级版本时必须同时更新 Skill 前置检查、MCP 配置示例、项目依赖和本规范
+
+---
+
 ## 通用目录结构
 
 ```

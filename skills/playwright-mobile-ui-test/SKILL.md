@@ -10,16 +10,37 @@ description: "Playwright 移动端 UI 自动化测试技能。包含三种模式
 
 ## 前置检查（必需）
 
-本技能依赖 `playwright-test` MCP 服务提供的工具（如 `playwright_run_test`）。执行任务前：
+本技能依赖 `playwright-test` MCP 服务提供的工具（如 `playwright_run_test`），并统一使用 **Playwright v1.61.1**。执行任务前：
 
-**第一步：直接尝试调用 playwright MCP 工具**
+**第一步：校验 MCP 服务版本配置**
+
+检查当前平台对应的项目级 MCP 配置。`playwright-test` 服务的启动参数必须显式包含 `playwright@1.61.1`：
+
+```json
+{
+  "playwright-test": {
+    "type": "stdio",
+    "command": "npx",
+    "args": ["--yes", "playwright@1.61.1", "run-test-mcp-server"],
+    "env": {
+      "PWTEST_HEADED": "1"
+    }
+  }
+}
+```
+
+- 配置完全一致 -> 进入第二步
+- 未配置、未指定版本、使用 `latest` 或版本不是 `1.61.1` -> 写入上述固定版本配置，并要求重新加载窗口或重启客户端后重新执行本技能
+- 不得继续使用已经启动但版本未知或版本不一致的 MCP 服务
+
+**第二步：直接尝试调用 playwright MCP 工具**
 
 不做任何命令行检查，直接调用一个 playwright MCP 工具（如列出测试文件）。
 
 - ✅ **调用成功** → MCP 已连接，继续执行任务
-- ❌ **工具不存在 / 调用失败** → 进入第二步
+- ❌ **工具不存在 / 调用失败** → 进入第三步
 
-**第二步：MCP 未连接时，自动识别平台并配置**
+**第三步：MCP 未连接时，自动识别平台并配置**
 
 分析当前运行环境，判断所在平台，然后在对应的**项目级** MCP 配置文件中注册以下服务：
 
@@ -28,7 +49,7 @@ description: "Playwright 移动端 UI 自动化测试技能。包含三种模式
   "playwright-test": {
     "type": "stdio",
     "command": "npx",
-    "args": ["playwright", "run-test-mcp-server"],
+    "args": ["--yes", "playwright@1.61.1", "run-test-mcp-server"],
     "env": {
       "PWTEST_HEADED": "1"
     }
@@ -36,7 +57,7 @@ description: "Playwright 移动端 UI 自动化测试技能。包含三种模式
 }
 ```
 
-配置写入后，再次检查 MCP 是否可用，如果还不可用则检查 **playwright-test MCP 配置**（重新加载窗口或重启客户端），然后重新执行本技能。
+配置写入后，重新加载窗口或重启客户端，再次检查 MCP 是否可用。如果仍不可用，则检查 **playwright-test MCP 配置**，然后重新执行本技能。
 
 ## 意图识别
 
