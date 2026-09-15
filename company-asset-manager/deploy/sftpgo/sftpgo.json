@@ -1,0 +1,96 @@
+{
+  "common": {
+    "idle_timeout": 30,
+    "max_total_connections": 64,
+    "max_per_host_connections": 10,
+    "defender": {
+      "enabled": true,
+      "driver": "memory",
+      "ban_time": 30,
+      "ban_time_increment": 50,
+      "threshold": 15,
+      "score_invalid": 2,
+      "score_valid": 1,
+      "score_limit_exceeded": 3,
+      "score_no_auth": 0,
+      "observation_time": 30,
+      "entries_soft_limit": 100,
+      "entries_hard_limit": 150,
+      "login_delay": {
+        "success": 0,
+        "password_failed": 1000
+      }
+    }
+  },
+  "sftpd": {
+    "bindings": [
+      {
+        "port": 0,
+        "address": ""
+      }
+    ]
+  },
+  "data_provider": {
+    "driver": "postgresql",
+    "name": "sftpgo",
+    "host": "db",
+    "port": 5432,
+    "username": "sftpgo",
+    "sslmode": 0,
+    "pool_size": 8,
+    "users_base_dir": "/srv/sftpgo/data",
+    "password_validation": {
+      "admins": {
+        "min_entropy": 60
+      },
+      "users": {
+        "min_entropy": 50
+      }
+    }
+  },
+  "httpd": {
+    "templates_path": "/usr/share/sftpgo/templates",
+    "static_files_path": "/usr/share/sftpgo/static",
+    "openapi_path": "",
+    "web_root": "/files",
+    "token_validation": 2,
+    "cookie_lifetime": 60,
+    "share_cookie_lifetime": 120,
+    "jwt_lifetime": 20,
+    "bindings": [
+      {
+        "port": 8080,
+        "address": "0.0.0.0",
+        "enable_web_admin": true,
+        "enable_web_client": true,
+        "enable_rest_api": true,
+        "enable_https": false,
+        "proxy_allowed": [
+          "172.19.0.1",
+          "172.17.0.1"
+        ],
+        "client_ip_proxy_header": "X-Forwarded-For",
+        "client_ip_header_depth": 0,
+        "render_openapi": false,
+        "languages": [
+          "zh-CN"
+        ],
+        "security": {
+          "enabled": true,
+          "allowed_hosts": [
+            "124.221.244.227"
+          ],
+          "https_proxy_headers": [
+            {
+              "key": "X-Forwarded-Proto",
+              "value": "https"
+            }
+          ],
+          "content_type_nosniff": true,
+          "referrer_policy": "same-origin",
+          "cross_origin_opener_policy": "same-origin"
+        }
+      }
+    ]
+  }
+}

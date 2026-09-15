@@ -1,0 +1,10 @@
+node_modules
+dist
+dist-cloud
+data
+output
+.playwright-cli
+backups
+certificates
+package-lock.json
+deploy/*.local.*

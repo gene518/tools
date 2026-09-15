@@ -1,0 +1,31 @@
+services:
+  sftpgo:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: sftpgo:2.7.5-local
+    container_name: sftpgo
+    restart: unless-stopped
+    user: "1000:1000"
+    env_file:
+      - sftpgo.local.env
+    ports:
+      - "127.0.0.1:4319:8080"
+    volumes:
+      - ./data:/srv/sftpgo
+      - ./config/sftpgo.json:/etc/sftpgo/sftpgo.json:ro
+    networks:
+      - company_assets
+    read_only: true
+    tmpfs:
+      - /tmp:mode=1777,noexec,nosuid,size=64m
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    mem_limit: 384m
+
+networks:
+  company_assets:
+    external: true
+    name: company-assets_default

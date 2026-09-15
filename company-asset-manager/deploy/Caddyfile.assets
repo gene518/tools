@@ -1,0 +1,10 @@
+# Add these handlers inside the existing tencent.geneecho.top site, before its fallback reverse_proxy.
+redir /asset-manager /asset-manager/ 308
+handle /asset-manager/* {
+    reverse_proxy 127.0.0.1:4318
+}
+handle {
+    reverse_proxy 127.0.0.1:8080 {
+        flush_interval -1
+    }
+}

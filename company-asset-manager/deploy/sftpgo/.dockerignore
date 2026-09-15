@@ -1,0 +1,10 @@
+*
+!build/
+!build/rootfs/
+!build/rootfs/**
+!locales/
+!locales/zh-CN/
+!locales/zh-CN/translation.json
+!templates/
+!templates/common/
+!templates/common/base.html

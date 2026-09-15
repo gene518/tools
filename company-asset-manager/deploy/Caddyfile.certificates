@@ -1,0 +1,19 @@
+{
+    admin 127.0.0.1:2020
+    http_port 8088
+    https_port 9443
+    auto_https disable_redirects
+}
+
+https://124.221.244.227:9443 {
+    bind 127.0.0.1
+    tls {
+        issuer acme {
+            dir https://acme-v02.api.letsencrypt.org/directory
+            profile shortlived
+            disable_tlsalpn_challenge
+            alt_http_port 8088
+        }
+    }
+    respond "Certificate maintenance endpoint" 200
+}
