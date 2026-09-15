@@ -1,0 +1,8 @@
+[Unit]
+Description=Install renewed company asset IP certificate
+After=docker.service caddy.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/company-assets-sync-certificate
+UMask=0027

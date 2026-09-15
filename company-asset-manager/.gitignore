@@ -1,0 +1,12 @@
+node_modules/
+dist/
+dist-cloud/
+backups/
+certificates/
+data/
+.env
+output/
+.playwright-cli/
+test-results/
+deploy/*.local.*
+deploy/sftpgo/*.local.*

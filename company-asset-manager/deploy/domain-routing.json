@@ -1,0 +1,31 @@
+{
+  "hostname": "tencent.geneecho.top",
+  "assetPath": "/asset-manager/",
+  "dns": { "type": "A", "content": "124.221.244.227", "proxied": true },
+  "sslMode": "full",
+  "originRule": {
+    "id": "c8949c3dce1b4094853a66e777c4dbf9",
+    "name": "Tencent HTTPS origin 8443",
+    "expression": "(http.host eq \"tencent.geneecho.top\" and http.request.scheme eq \"https\")",
+    "destinationPort": 8443,
+    "hostHeader": "preserve",
+    "sni": "preserve"
+  },
+  "originProtocol": "HTTPS with HTTP/1.1",
+  "redirectRule": {
+    "id": "3a58f811c7ba44298dbe2969d3b06aaf",
+    "name": "Tencent HTTP to HTTPS",
+    "source": "http://tencent.geneecho.top/*",
+    "target": "https://tencent.geneecho.top/${1}",
+    "statusCode": 301,
+    "preserveQueryString": true
+  },
+  "firewall": {
+    "instance": "lhins-etwgi412",
+    "protocol": "TCP",
+    "port": 8443,
+    "source": "0.0.0.0/0",
+    "action": "allow"
+  },
+  "fallbackUrl": "https://124.221.244.227/asset-manager/"
+}

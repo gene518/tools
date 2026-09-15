@@ -1,0 +1,38 @@
+{
+  "name": "company-asset-manager",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "server": "node --env-file-if-exists=.env server/index.mjs",
+    "build": "vite build",
+    "test": "node --env-file-if-exists=.env --test tests/*.test.mjs",
+    "start": "node scripts/start-local.mjs",
+    "build:cloud": "BASE_PATH=/asset-manager/ vite build --outDir dist-cloud",
+    "backup": "bash deploy/backup.sh compose.local.yml"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "csv-parse": "^7.0.2",
+    "csv-stringify": "^6.6.0",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.2.1",
+    "helmet": "^8.1.0",
+    "lucide-react": "^0.577.0",
+    "multer": "^2.0.2",
+    "pg": "^8.20.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^5.1.4",
+    "prettier": "^3.9.6",
+    "supertest": "^7.2.2",
+    "vite": "^7.3.1"
+  }
+}

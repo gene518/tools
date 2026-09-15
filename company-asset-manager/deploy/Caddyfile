@@ -1,0 +1,42 @@
+{
+    admin 127.0.0.1:2019
+    default_sni 124.221.244.227
+    servers :8443 {
+        protocols h1
+    }
+}
+
+http://124.221.244.227 {
+    handle /.well-known/acme-challenge/* {
+        reverse_proxy 127.0.0.1:8088
+    }
+    handle {
+        redir https://124.221.244.227{uri} 308
+    }
+}
+
+https://124.221.244.227 {
+    tls /etc/caddy/company-assets-tls/current/fullchain.pem /etc/caddy/company-assets-tls/current/privkey.pem
+    encode zstd gzip
+    header Strict-Transport-Security "max-age=31536000"
+    redir / /asset-manager/ 308
+    redir /asset-manager /asset-manager/ 308
+    handle /asset-manager/* {
+        reverse_proxy 127.0.0.1:4318
+    }
+    respond 404
+}
+
+tencent.geneecho.top, https://tencent.geneecho.top:8443 {
+    encode zstd gzip
+    header Strict-Transport-Security "max-age=31536000"
+    redir /asset-manager /asset-manager/ 308
+    handle /asset-manager/* {
+        reverse_proxy 127.0.0.1:4318
+    }
+    handle {
+        reverse_proxy 127.0.0.1:8080 {
+            flush_interval -1
+        }
+    }
+}
